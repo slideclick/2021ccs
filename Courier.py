@@ -8,7 +8,7 @@ class Courier(object):
     @classmethod
     def CourierArrived(cls,obj):
         obj.q.put(obj)
-        print('CourierArrived: %d',obj)
+        print('------------>',id(obj))
         obj.trigger.stop()
 
     def __init__(self, q):
@@ -18,7 +18,7 @@ class Courier(object):
         # self.Order=order
         self.waitTime=0
         Courier.couriers.append(self)
-        # self.Event='CourierArrived'
+        self.Event='CourierArrived'
         self.trigger=RepeatedTimer(self.HowlongToArrive,Courier.CourierArrived,self)
         self.q=q
 

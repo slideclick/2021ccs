@@ -6,7 +6,7 @@ class Order(object):
     @classmethod
     def OrdercanEate(cls,obj):
         obj.q.put(obj)
-        print('OrdercanEate: %d',obj)
+        print('---->',id(obj))
         obj.trigger.stop()
 
     def __init__(self, courier):
@@ -18,7 +18,7 @@ class Order(object):
         self.pickupTime=0
         self.picked=0
         Order.orders.append(self)
-        # self.Event=OrdercanEate
+        self.Event="OrdercanEate"
         self.trigger=RepeatedTimer(self.HowlongToPrepare,Order.OrdercanEate,self)
         self.q=courier.q
 
