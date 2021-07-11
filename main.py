@@ -16,10 +16,10 @@ class GoodsConsume(threading.Thread):
         while True:
             if not self.queuelist.empty():
                 event=self.queuelist.get()
-                print( "%s , obj %d,box have :%d" % (event.__class__, id(event),self.queuelist.qsize()))
+                print( "%s , obj %d,box remained :%d" % (event.__class__, id(event),self.queuelist.qsize()))
                 
             else :
-                time.sleep(0.5)
+                time.sleep(1)
                 if  self.queuelist.empty():
                    pass#print( "NOTE: BOX is null ,please wait ...  size %d ,fillin 0" % (box))
 
@@ -41,7 +41,7 @@ if __name__ == '__main__':
         c=GoodsConsume(eventQueue)
         c.start()
         c.show()
-        for i in range(3):
+        for i in range(26):
             print(i)
             GetNextOrder(eventQueue)
             time.sleep(0.5)

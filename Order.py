@@ -12,7 +12,7 @@ class Order(object):
     def __init__(self, courier):
         self.canEate=0
         self.canEateTime=0
-        self.HowlongToPrepare=7
+        self.HowlongToPrepare=4
         self.Courier=courier
         self.waitTime=0
         self.pickupTime=0
