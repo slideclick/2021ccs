@@ -66,7 +66,7 @@ class Courier(object):
     def __init__(self, q):
         self.Arrived=0
         self.ArrivedTime=0
-        self.HowlongToArrive=random.uniform(3,5)
+        self.HowlongToArrive=random.uniform(0,8)
         self.order=None
         self.waitTime=timedelta()
         Courier.couriers.append(self)
