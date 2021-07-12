@@ -27,12 +27,12 @@ class Order(object):
         self.q=courier.q
 
     def setWaitTime(self,now):
-        assert now > 0
+        # assert now > 0
         # assert self.waitTime == -1
         assert self.courier.Arrived == 1
         self.waitTime = now - self.canEateTime
         self.getUpdateTime = now
-        print('%s get updated %s' % self.__class__, str(now))
+        print('%s get updated %s' % (self.__class__, str(now)))
 
     def SetcanEate(self):
         now = datetime.now()
@@ -72,7 +72,7 @@ class Courier(object):
     def __init__(self, q):
         self.Arrived=0
         self.ArrivedTime=0
-        self.HowlongToArrive=4
+        self.HowlongToArrive=19
         self.order=None
         self.waitTime=timedelta()
         Courier.couriers.append(self)

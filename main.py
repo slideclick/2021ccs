@@ -37,7 +37,7 @@ if __name__ == '__main__':
         c=GoodsConsume(eventQueue)
         c.start()
         c.show()
-        for i in range(1):
+        for i in range(10):
             print(i)
             GetNextOrder(eventQueue)
             time.sleep(0.5)
