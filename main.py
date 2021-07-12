@@ -16,9 +16,9 @@ if __name__ == '__main__':
     try:
         with open('dispatch_orders.json',encoding='utf-8') as f_in: #sample
             data = json.load(f_in)
-            for order in data:
+            for seq,order in enumerate(data):
                 prepareTime = int (order['prepTime'])
-                print('Order new with prepareTime: %d'%prepareTime) 
+                print('Order %d new with prepareTime: %d'%(seq+1,prepareTime)) 
                 GetNextOrder(prepareTime)
                 time.sleep(1/int(OrdersPerSecond))# 2 order per second by default
 
