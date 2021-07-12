@@ -3,13 +3,19 @@ from RepeatedTimer import RepeatedTimer
 from datetime import datetime,timedelta
 import queue,sys,random
 
+from Config import ConfigParser
+global debugFlag 
+global OrdersPerSecond
+debugFlag = ConfigParser.config_dic['Debug']
+OrdersPerSecond = ConfigParser.config_dic['OrdersPerSecond']
+
 class Order(object):
     orders=[]
     @classmethod
     def OrdercanEate(cls,obj):
-        obj.q.put(obj)
+        # obj.q.put(obj)
         obj.trigger.stop()
-        print('----> canEate: ', id(obj))
+        print('----> canEate: ', id(obj)) if debugFlag == '1' else None
         obj.SetcanEate();
 
     def __init__(self, courier):
@@ -30,7 +36,7 @@ class Order(object):
         assert self.courier.Arrived == 1
         self.waitTime = now - self.canEateTime
         self.getUpdateTime = now
-        print('%s get updated %s' % (self.__class__, str(now)))
+        print('%s get updated %s' % (self.__class__, str(now))) if debugFlag == '1' else None
 
     def SetcanEate(self):
         now = datetime.now()
@@ -58,8 +64,8 @@ class Courier(object):
     couriers=[]
     @classmethod
     def CourierArrived(cls,obj):
-        obj.q.put(obj)
-        print('------------> Arrived: ',id(obj))
+        # obj.q.put(obj)
+        print('------------> Arrived: ',id(obj)) if debugFlag == '1' else None
         obj.trigger.stop()
         obj.SetArrived();
 
@@ -81,7 +87,7 @@ class Courier(object):
         assert self.order.canEate == 1
         self.waitTime = now - self.ArrivedTime
         self.getUpdateTime = now
-        print('%s get updated %s' % (self.__class__,str(now)))
+        print('%s get updated %s' % (self.__class__,str(now))) if debugFlag == '1' else None
 
     def SetArrived(self):
         now = datetime.now()

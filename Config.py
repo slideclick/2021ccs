@@ -20,16 +20,11 @@ class ConfigParser():
             return value
 
 con = ConfigParser()
-res = con.get_config('basic', 'MaxFoodTime')
-res = con.get_config('basic', 'MinFoodTime')
-res = con.get_config('basic', 'OrderPerSecond')
-res = con.get_config('basic', 'ArriveTime')
+res = con.get_config('basic', 'Debug')
+con.get_config('basic', 'OrdersPerSecond')
 if __name__ == '__main__':
     con = ConfigParser()
-    res = con.get_config('basic', 'MaxFoodTime')
-    res = con.get_config('basic', 'MinFoodTime')
-    res = con.get_config('basic', 'OrderPerSecond')
-    res = con.get_config('basic', 'ArriveTime')
-
+    res = con.get_config('basic', 'Debug')
+    con.get_config('basic', 'OrdersPerSecond')
     print(con.config_dic)
 
