@@ -14,11 +14,11 @@ def GetNextOrder(prepareTime):
 if __name__ == '__main__':
 
     try:
-        with open('sample.json',encoding='utf-8') as f_in:
+        with open('dispatch_orders.json',encoding='utf-8') as f_in: #sample
             data = json.load(f_in)
             for order in data:
                 prepareTime = int (order['prepTime'])
-                print('Order: %d'%prepareTime) if debugFlag == '1' else None
+                print('Order new with prepareTime: %d'%prepareTime) 
                 GetNextOrder(prepareTime)
                 time.sleep(1/int(OrdersPerSecond))# 2 order per second by default
 

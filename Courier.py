@@ -71,7 +71,7 @@ class Courier(object):
         assert self.order.canEate == 1
         self.waitTime = now - self.ArrivedTime
         self.getUpdateTime = now
-        print('courier waiting for order: %s s\n' % (str(self.waitTime.total_seconds()))) #if debugFlag == '1' else None
+        print('Courier waiting for order: %s s\n' % (str(self.waitTime.total_seconds()))) #if debugFlag == '1' else None
 
     def SetArrived(self):
         now = datetime.now()
