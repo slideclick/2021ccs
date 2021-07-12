@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from Config import ConfigParser
 from Courier import Courier,Order
-import queue,sys
+import queue,sys,statistics 
 import time
 import threading
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         c=GoodsConsume(eventQueue)
         c.start()
         c.show()
-        for i in range(10):
+        for i in range(1000):
             print(i)
             GetNextOrder(eventQueue)
             time.sleep(0.5)
@@ -50,7 +50,7 @@ if __name__ == '__main__':
             print('qsize down: ',eventQueue.qsize())
             
         else:
-            print(sum([x.waitTime.total_seconds() for x in Order.orders]))
-            print(sum([x.waitTime.total_seconds() for x in Courier.couriers]))
+            print(statistics.mean([x.waitTime.total_seconds() for x in Order.orders]))
+            print(statistics.mean([x.waitTime.total_seconds() for x in Courier.couriers]))
             print()
     print('main thread exit')

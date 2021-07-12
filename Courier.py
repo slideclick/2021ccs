@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from RepeatedTimer import RepeatedTimer
 from datetime import datetime,timedelta
-import queue,sys
+import queue,sys,random
 
 class Order(object):
     orders=[]
@@ -15,7 +15,7 @@ class Order(object):
     def __init__(self, courier):
         self.canEate=0
         self.canEateTime=0
-        self.HowlongToPrepare=7
+        self.HowlongToPrepare=4
         self.courier=courier
         self.courier.order = self
         self.waitTime=timedelta()
@@ -27,8 +27,6 @@ class Order(object):
         self.q=courier.q
 
     def setWaitTime(self,now):
-        # assert now > 0
-        # assert self.waitTime == -1
         assert self.courier.Arrived == 1
         self.waitTime = now - self.canEateTime
         self.getUpdateTime = now
@@ -39,12 +37,10 @@ class Order(object):
         self.canEate = 1
         self.canEateTime = now;
         if self.courier.Arrived == 1:
-            # self.waitTime = 0
-            # assert self.courier.waitTime == -1
             self.courier.setWaitTime(now)
         else:
-            assert self.courier.ArrivedTime == 0
-            # self.waitTime = -1
+            assert self.courier.Arrived == 0
+
 
 
 class Orders(object):
@@ -59,8 +55,6 @@ class Orders(object):
 
 
 class Courier(object):
-    """docstring for Courier"""
-
     couriers=[]
     @classmethod
     def CourierArrived(cls,obj):
@@ -72,7 +66,7 @@ class Courier(object):
     def __init__(self, q):
         self.Arrived=0
         self.ArrivedTime=0
-        self.HowlongToArrive=19
+        self.HowlongToArrive=random.uniform(3,5)
         self.order=None
         self.waitTime=timedelta()
         Courier.couriers.append(self)
@@ -81,10 +75,10 @@ class Courier(object):
         self.trigger=RepeatedTimer(self.HowlongToArrive,Courier.CourierArrived,self)
         self.q=q
 
+    
+
     def setWaitTime(self,now):
-        # assert now > 0
-        # assert self.waitTime == -1
-        # assert self.order.canEate == 1
+        assert self.order.canEate == 1
         self.waitTime = now - self.ArrivedTime
         self.getUpdateTime = now
         print('%s get updated %s' % (self.__class__,str(now)))
@@ -95,12 +89,9 @@ class Courier(object):
         self.ArrivedTime =now;
         self.order = Order.orders[self.seqNumber - 1]
         if self.order.canEate == 1:
-            # self.waitTime = 0
-            # assert self.order.waitTime == -1
             self.order.setWaitTime(now)
         else:
-            # self.waitTime = -1
-            assert self.order.canEateTime == 0
+            assert self.order.canEate == 0
 
 if __name__ == '__main__':
     import doctest
