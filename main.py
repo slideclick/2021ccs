@@ -2,22 +2,25 @@
 
 from Courier import Courier,Order,debugFlag,OrdersPerSecond
 import queue,sys,statistics 
-import time
+import time,json
 import threading
 
 
-def GetNextOrder():
+def GetNextOrder(prepareTime):
     courier = Courier();
-    o=Order(courier);
+    o=Order(courier,prepareTime);
     return o
 
 if __name__ == '__main__':
 
     try:
-        for i in range(10):
-            print('Order: %d'%i)
-            GetNextOrder()
-            time.sleep(1/int(OrdersPerSecond))# 2 order per second by default
+        with open('sample.json',encoding='utf-8') as f_in:
+            data = json.load(f_in)
+            for order in data:
+                prepareTime = int (order['prepTime'])
+                print('Order: %d'%prepareTime)
+                GetNextOrder(prepareTime)
+                time.sleep(1/int(OrdersPerSecond))# 2 order per second by default
 
         while True:
             if not ( all(x.canEate==1 for x in Order.orders) and all(x.Arrived == 1 for x in Courier.couriers) ):

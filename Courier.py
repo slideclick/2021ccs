@@ -19,10 +19,10 @@ class Order(object):
         print('----> canEate: ', id(obj)) if debugFlag == '1' else None
         obj.SetcanEate();
 
-    def __init__(self, courier):
+    def __init__(self, courier,prepareTime):
         self.canEate=0
         self.canEateTime=0
-        self.HowlongToPrepare=4
+        self.HowlongToPrepare=prepareTime
         self.courier=courier
         self.courier.order = self
         self.waitTime=timedelta()
@@ -67,7 +67,7 @@ class Courier(object):
     @classmethod
     def CourierArrived(cls,obj):
         # obj.q.put(obj)
-        print('------------> Arrived: ',id(obj)) if debugFlag == '1' else None
+        print('------------> Arrived %d after %.3f s: '%(id(obj),obj.HowlongToArrive)) if debugFlag == '1' else None
         obj.trigger.stop()
         obj.SetArrived();
 
