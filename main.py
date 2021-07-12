@@ -29,6 +29,7 @@ if __name__ == '__main__':
                 print('Order   Average  Waittime(seconds): %.3f ,total %d orders' % (statistics.mean([x.waitTime.total_seconds() for x in Order.orders]),len(Order.orders)))
                 print('Courier Average  Waittime(seconds): %.3f ,total %d courier' % (statistics.mean([x.waitTime.total_seconds() for x in Courier.couriers]),len(Courier.couriers)))
                 print()
+                break
             time.sleep(3)
     except KeyboardInterrupt:
         print ("interruptted by Ctrl-c")
