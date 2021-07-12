@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 from Config import ConfigParser
-from Courier import Courier
-from Order import Order
+from Courier import Courier,Order
 import queue,sys
 import time
 import threading
@@ -20,8 +19,6 @@ class GoodsConsume(threading.Thread):
                 
             else :
                 time.sleep(0.5)
-                if  self.queuelist.empty():
-                   pass#print( "NOTE: BOX is null ,please wait ...  size %d ,fillin 0" % (box))
 
             time.sleep(0.5)
     def show(self):
@@ -31,7 +28,6 @@ class GoodsConsume(threading.Thread):
 def GetNextOrder(q):
     courier = Courier(q);
     o=Order(courier);
-    courier.Order = o
     return o
 
 if __name__ == '__main__':
@@ -48,7 +44,13 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print ("interrupt")
         sys.exit(1)
-    while not eventQueue.empty():
-        print('qsize down: ',eventQueue.qsize())
+    while True:
         time.sleep(0.5)
-    print('exit')
+        if not eventQueue.empty():
+            print('qsize down: ',eventQueue.qsize())
+            
+        else:
+            print(sum([x.waitTime.total_seconds() for x in Order.orders]))
+            print(sum([x.waitTime.total_seconds() for x in Courier.couriers]))
+            print()
+    print('main thread exit')
