@@ -2,6 +2,7 @@
 from RepeatedTimer import RepeatedTimer
 from datetime import datetime,timedelta
 import queue,sys,random
+import threading
 
 from Config import ConfigParser
 global debugFlag 
@@ -30,7 +31,7 @@ class Order(object):
         Order.orders.append(self)
         self.Event="OrdercanEate"
         self.trigger=RepeatedTimer(self.HowlongToPrepare,Order.OrdercanEate,self)
-        self.q=courier.q
+        self._key_lock = threading.Lock()
 
     def setWaitTime(self,now):
         assert self.courier.Arrived == 1
@@ -40,12 +41,13 @@ class Order(object):
 
     def SetcanEate(self):
         now = datetime.now()
-        self.canEate = 1
-        self.canEateTime = now;
-        if self.courier.Arrived == 1:
-            self.courier.setWaitTime(now)
-        else:
-            assert self.courier.Arrived == 0
+        with self._key_lock:
+            self.canEate = 1
+            self.canEateTime = now;
+            if self.courier.Arrived == 1:
+                self.courier.setWaitTime(now)
+            else:
+                assert self.courier.Arrived == 0
 
 
 
@@ -69,17 +71,17 @@ class Courier(object):
         obj.trigger.stop()
         obj.SetArrived();
 
-    def __init__(self, q):
+    def __init__(self):
         self.Arrived=0
         self.ArrivedTime=0
-        self.HowlongToArrive=random.uniform(0,8)
+        self.HowlongToArrive=random.uniform(3,15)
         self.order=None
         self.waitTime=timedelta()
         Courier.couriers.append(self)
         self.seqNumber= len(Courier.couriers)
         self.Event='CourierArrived'
         self.trigger=RepeatedTimer(self.HowlongToArrive,Courier.CourierArrived,self)
-        self.q=q
+        self._key_lock = threading.Lock()
 
     
 
@@ -91,13 +93,14 @@ class Courier(object):
 
     def SetArrived(self):
         now = datetime.now()
-        self.Arrived = 1
-        self.ArrivedTime =now;
-        self.order = Order.orders[self.seqNumber - 1]
-        if self.order.canEate == 1:
-            self.order.setWaitTime(now)
-        else:
-            assert self.order.canEate == 0
+        with self._key_lock:
+            self.Arrived = 1
+            self.ArrivedTime =now;
+            self.order = Order.orders[self.seqNumber - 1]
+            if self.order.canEate == 1:
+                self.order.setWaitTime(now)
+            else:
+                assert self.order.canEate == 0
 
 if __name__ == '__main__':
     import doctest

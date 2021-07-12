@@ -6,18 +6,17 @@ import time
 import threading
 
 
-def GetNextOrder(q):
-    courier = Courier(q);
+def GetNextOrder():
+    courier = Courier();
     o=Order(courier);
     return o
 
 if __name__ == '__main__':
 
     try:
-        eventQueue = queue.Queue()
         for i in range(10):
             print('Order: %d'%i)
-            GetNextOrder(eventQueue)
+            GetNextOrder()
             time.sleep(1/int(OrdersPerSecond))# 2 order per second by default
 
         while True:
