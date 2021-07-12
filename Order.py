@@ -12,7 +12,7 @@ class Order(object):
     def __init__(self, courier):
         self.canEate=0
         self.canEateTime=0
-        self.HowlongToPrepare=4
+        self.HowlongToPrepare=5
         self.Courier=courier
         self.waitTime=0
         self.pickupTime=0
@@ -21,6 +21,17 @@ class Order(object):
         self.Event="OrdercanEate"
         self.trigger=RepeatedTimer(self.HowlongToPrepare,Order.OrdercanEate,self)
         self.q=courier.q
+
+    def SetcanEate(self):
+        now = datetime.now()
+        self.canEate = 1
+        self.canEateTime = now;
+        if self.Courier.Arrived == 1:
+            self.waitTime = 0
+        else:
+             
+            assert self.Courier.ArrivedTime == 0 
+
 
 class Orders(object):
     def __init__(self, arg=None):

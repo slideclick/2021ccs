@@ -19,7 +19,7 @@ class GoodsConsume(threading.Thread):
                 print( "%s , obj %d,box remained :%d" % (event.__class__, id(event),self.queuelist.qsize()))
                 
             else :
-                time.sleep(1)
+                time.sleep(0.5)
                 if  self.queuelist.empty():
                    pass#print( "NOTE: BOX is null ,please wait ...  size %d ,fillin 0" % (box))
 
@@ -41,11 +41,14 @@ if __name__ == '__main__':
         c=GoodsConsume(eventQueue)
         c.start()
         c.show()
-        for i in range(26):
+        for i in range(1):
             print(i)
             GetNextOrder(eventQueue)
             time.sleep(0.5)
     except KeyboardInterrupt:
         print ("interrupt")
         sys.exit(1)
+    while not eventQueue.empty():
+        print('qsize down: ',eventQueue.qsize())
+        time.sleep(0.5)
     print('exit')

@@ -1,5 +1,8 @@
 # -*- coding: UTF-8 -*-
 from RepeatedTimer import RepeatedTimer
+from datetime import datetime
+
+
 import queue,sys
 class Courier(object):
     """docstring for Courier"""
@@ -10,6 +13,7 @@ class Courier(object):
         obj.q.put(obj)
         print('------------>',id(obj))
         obj.trigger.stop()
+        obj.SetArrived();
 
     def __init__(self, q):
         self.Arrived=0
@@ -21,6 +25,14 @@ class Courier(object):
         self.Event='CourierArrived'
         self.trigger=RepeatedTimer(self.HowlongToArrive,Courier.CourierArrived,self)
         self.q=q
+
+    def SetArrived(self):
+        self.Arrived = 1
+        self.ArrivedTime = datetime.now();
+        if self.Order.canEate == 1:
+            self.waitTime = 0
+        else:
+            pass    
 
 if __name__ == '__main__':
     import doctest
