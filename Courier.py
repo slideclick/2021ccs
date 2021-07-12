@@ -33,7 +33,7 @@ class Order(object):
         assert self.courier.Arrived == 1
         self.waitTime = now - self.canEateTime
         self.getUpdateTime = now
-        print('%s WaitTime get updated %s' % (self.__class__, str(self.waitTime.total_seconds()))) if debugFlag == '1' else None
+        print('order waiting for courier:  %s s\n' % (str(self.waitTime.total_seconds()))) #if debugFlag == '1' else None
 
     def SetcanEate(self):
         now = datetime.now()
@@ -50,7 +50,7 @@ class Courier(object):
     couriers=[]
     @classmethod
     def CourierArrived(cls,obj):
-        print('------------> Arrived %d after %.3f s: '%(id(obj),obj.HowlongToArrive)) if debugFlag == '1' else None
+        print('------------> Arrived %d taking %d prepareTime %d travelling %.3f s: '%(id(obj),id(obj.order),obj.order.HowlongToPrepare, obj.HowlongToArrive)) if debugFlag == '1' else None
         obj.trigger.stop()
         obj.SetArrived();
 
@@ -71,7 +71,7 @@ class Courier(object):
         assert self.order.canEate == 1
         self.waitTime = now - self.ArrivedTime
         self.getUpdateTime = now
-        print('%s WaitTime get updated %s' % (self.__class__,str(self.waitTime.total_seconds()))) if debugFlag == '1' else None
+        print('courier waiting for order: %s s\n' % (str(self.waitTime.total_seconds()))) #if debugFlag == '1' else None
 
     def SetArrived(self):
         now = datetime.now()
