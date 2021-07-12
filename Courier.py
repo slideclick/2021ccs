@@ -14,7 +14,6 @@ class Order(object):
     orders=[]
     @classmethod
     def OrdercanEate(cls,obj):
-        # obj.q.put(obj)
         obj.trigger.stop()
         print('----> canEate: ', id(obj)) if debugFlag == '1' else None
         obj.SetcanEate();
@@ -26,10 +25,7 @@ class Order(object):
         self.courier=courier
         self.courier.order = self
         self.waitTime=timedelta()
-        self.pickupTime=0
-        self.picked=0
         Order.orders.append(self)
-        self.Event="OrdercanEate"
         self.trigger=RepeatedTimer(self.HowlongToPrepare,Order.OrdercanEate,self)
         self._key_lock = threading.Lock()
 
@@ -37,7 +33,7 @@ class Order(object):
         assert self.courier.Arrived == 1
         self.waitTime = now - self.canEateTime
         self.getUpdateTime = now
-        print('%s get updated %s' % (self.__class__, str(now))) if debugFlag == '1' else None
+        print('%s WaitTime get updated %s' % (self.__class__, str(self.waitTime.total_seconds()))) if debugFlag == '1' else None
 
     def SetcanEate(self):
         now = datetime.now()
@@ -50,23 +46,10 @@ class Order(object):
                 assert self.courier.Arrived == 0
 
 
-
-class Orders(object):
-    def __init__(self, arg=None):
-        self.arg = arg
-
-    def GetNext():
-        courier = Courier();
-        o=Order(courier);
-        courier.Order = o
-        return o
-
-
 class Courier(object):
     couriers=[]
     @classmethod
     def CourierArrived(cls,obj):
-        # obj.q.put(obj)
         print('------------> Arrived %d after %.3f s: '%(id(obj),obj.HowlongToArrive)) if debugFlag == '1' else None
         obj.trigger.stop()
         obj.SetArrived();
@@ -79,7 +62,6 @@ class Courier(object):
         self.waitTime=timedelta()
         Courier.couriers.append(self)
         self.seqNumber= len(Courier.couriers)
-        self.Event='CourierArrived'
         self.trigger=RepeatedTimer(self.HowlongToArrive,Courier.CourierArrived,self)
         self._key_lock = threading.Lock()
 
@@ -89,7 +71,7 @@ class Courier(object):
         assert self.order.canEate == 1
         self.waitTime = now - self.ArrivedTime
         self.getUpdateTime = now
-        print('%s get updated %s' % (self.__class__,str(now))) if debugFlag == '1' else None
+        print('%s WaitTime get updated %s' % (self.__class__,str(self.waitTime.total_seconds()))) if debugFlag == '1' else None
 
     def SetArrived(self):
         now = datetime.now()
@@ -105,7 +87,6 @@ class Courier(object):
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
-
     pass        
 
         
