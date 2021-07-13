@@ -14,22 +14,21 @@ class Dispactcher(threading.Thread):
 
     def run(self):
         while True:
-            if not self.orderQueue.empty():
+            order = self.orderQueue.get()
+            if order:
+                courier = self.courierQueue.get()
                 now=  datetime.now()
-
-                order=self.orderQueue.get()
-                order.SetPicked(now);
-                if not self.courierQueue.empty():
-                    courier=self.courierQueue.get()
+                if courier:
                     courier.SetPicked(now);
+                    order.SetPicked(now);
 
-                print( "%s obj %d picked by %d,queue remained :%d" % (order.__class__, id(order),id(courier),self.orderQueue.qsize()))
+                    print( "%s obj %d picked by %d,queue remained :%d" % (order.__class__, id(order),id(courier),self.orderQueue.qsize()))
                 
             else :
-                time.sleep(0.01)
-            time.sleep(0.01)
+                pass
+            
     def show(self):
-        print ("Dispactcher %s ,infomation -- %d"%(self.__class__,self.orderQueue.qsize()))
+        print ("Dispactcher %s ,infomation -- %d"%(self.__class__,self.orderQueue.qsize()))if debugFlag == '1' else None
 
 
 def GetNextOrder(prepareTime,orderDoneQueue,courierArrivedQueue):
@@ -41,6 +40,9 @@ if __name__ == '__main__':
     try:
         orderDoneQueue = queue.Queue()
         courierArrivedQueue = queue.Queue()
+        c=Dispactcher(orderDoneQueue,courierArrivedQueue)
+        c.start()
+        c.show()
         with open('sample.json',encoding='utf-8') as f_in: #sample
             data = json.load(f_in)
             for seq,order in enumerate(data):
@@ -51,7 +53,7 @@ if __name__ == '__main__':
 
         while True:
             if not ( all(x.canEate==1 for x in Order.orders) and all(x.Arrived == 1 for x in Courier.couriers) ):
-                print('qsize down: ',len([x.canEate for x in Order.orders if x.canEate==0]))  if debugFlag == '1' else None            
+                pass#print('qsize down: ',len([x.canEate for x in Order.orders if x.canEate==0]))  if debugFlag == '1' else None            
             else:
                 print('Order   Average  Waittime(seconds): %.3f ,total %d orders' % (statistics.mean([x.waitTime.total_seconds() for x in Order.orders]),len(Order.orders)))
                 print('Courier Average  Waittime(seconds): %.3f ,total %d courier' % (statistics.mean([x.waitTime.total_seconds() for x in Courier.couriers]),len(Courier.couriers)))
