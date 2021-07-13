@@ -23,7 +23,7 @@ class Order(object):
         self.canEate=0
         self.canEateTime=datetime(1,1,1)
         self.deQueueTime = 0
-        self.HowlongToPrepare=8#prepareTime
+        self.HowlongToPrepare=prepareTime
         self.waitTime=timedelta()
         Order.orders.append(self)
         self.trigger=RepeatedTimer(self.HowlongToPrepare,Order.OrdercanEate,self)
@@ -54,7 +54,7 @@ class Courier(object):
         self.Arrived=0
         self.ArrivedTime=datetime(1,1,1)
         self.deQueueTime = 0
-        self.HowlongToArrive= 2#random.uniform(3,15)
+        self.HowlongToArrive= random.uniform(3,15)
         self.waitTime=timedelta()
         Courier.couriers.append(self)
         self.trigger=RepeatedTimer(self.HowlongToArrive,Courier.CourierArrived,self)

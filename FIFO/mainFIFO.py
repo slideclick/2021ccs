@@ -44,7 +44,7 @@ if __name__ == '__main__':
         c=Dispactcher(orderDoneQueue,courierArrivedQueue)
         c.start()
         c.show()
-        with open('sample.json',encoding='utf-8') as f_in: #sample
+        with open('dispatch_orders.json',encoding='utf-8') as f_in: #sample
             data = json.load(f_in)
             for seq,order in enumerate(data):
                 prepareTime = int (order['prepTime'])
