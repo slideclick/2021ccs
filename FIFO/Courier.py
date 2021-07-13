@@ -23,7 +23,7 @@ class Order(object):
         self.canEate=0
         self.canEateTime=datetime(1,1,1)
         self.deQueueTime = 0
-        self.HowlongToPrepare=2#prepareTime
+        self.HowlongToPrepare=8#prepareTime
         self.waitTime=timedelta()
         Order.orders.append(self)
         self.trigger=RepeatedTimer(self.HowlongToPrepare,Order.OrdercanEate,self)
@@ -35,7 +35,7 @@ class Order(object):
         print("SetcanEate: ",self.__class__,self.canEateTime)if debugFlag == '1' else None
 
     def SetPicked(self,current):
-        print(type(current),current,self.canEateTime)
+        print(type(current),current,self.canEateTime)if debugFlag == '1' else None
         self.waitTime = current - self.canEateTime
         self.deQueueTime = current 
         print('%s %d waittime %.3f'%(self.__class__,id(self),self.waitTime.total_seconds()))      
@@ -54,7 +54,7 @@ class Courier(object):
         self.Arrived=0
         self.ArrivedTime=datetime(1,1,1)
         self.deQueueTime = 0
-        self.HowlongToArrive= 5#random.uniform(3,15)
+        self.HowlongToArrive= 2#random.uniform(3,15)
         self.waitTime=timedelta()
         Courier.couriers.append(self)
         self.trigger=RepeatedTimer(self.HowlongToArrive,Courier.CourierArrived,self)
@@ -66,7 +66,7 @@ class Courier(object):
         print("SetArrived: ",self.__class__,type(self.ArrivedTime))if debugFlag == '1' else None
 
     def SetPicked(self,now):
-        print(type(now),now,self.ArrivedTime)
+        print(type(now),now,self.ArrivedTime)if debugFlag == '1' else None
         self.waitTime = now - self.ArrivedTime
         self.deQueueTime = now 
         print('%s %d waittime %.3f'%(self.__class__,id(self),self.waitTime.total_seconds()))

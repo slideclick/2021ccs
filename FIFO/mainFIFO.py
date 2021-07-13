@@ -22,7 +22,8 @@ class Dispactcher(threading.Thread):
                     courier.SetPicked(now);
                     order.SetPicked(now);
 
-                    print( "%s obj %d picked by %d,queue remained :%d" % (order.__class__, id(order),id(courier),self.orderQueue.qsize()))
+                    print( "%s %d picked by %d,queue remained :%d" % (order.__class__, id(order),id(courier),self.orderQueue.qsize()))\
+                    if debugFlag == '1' else None
                 
             else :
                 pass
