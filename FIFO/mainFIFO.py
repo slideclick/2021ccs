@@ -1,24 +1,58 @@
-# -*- coding: UTF-8 -*- cp936
-'''
-python编辑器基本要求(Geany能满足)--尽量少移动光标,少移动到鼠标
-以下按照优先级排序
-1.C:\WINDOWS\SHELLNEW下面做个模板文件
-2. 设置tab为空格:检验办法就是按完tab按backspace看回到哪里的光标.npp在language里面
-3.使用shift tab反缩进.或者tab需要光标在行首,最好的是ctrl[](evevnote是ctrl M)
-4.在:后回车自动缩进.如果在缩进块里面多按一个回车,能够自动回到行首就好了.
-不过好像有时为了可读就是不能那样 例如一个try下面分几部分都是一个缩进
-5.选中几行代码之后按Tab全部进，按Shift+Tab全部后退一个。
-6.支持立即运行从编辑器中,例如ctrl B
-或者你使用ipython的 %run 命令,然后你手工调用函数
-'''
-import sys
+# -*- coding: UTF-8 -*-
+from Config import ConfigParser
+from Courier import Courier,Order,debugFlag,OrdersPerSecond
+
+import time,json
+import queue,sys,statistics 
+import threading
+
+# box=15
+# class GoodsConsume(threading.Thread):
+#     def __init__(self,q):
+#         super(GoodsConsume,self).__init__()
+#         self.queuelist=q
+
+#     def run(self):
+#         while True:
+#             if not self.queuelist.empty():
+#                 event=self.queuelist.get()
+#                 print( "%s , obj %d,box remained :%d" % (event.__class__, id(event),self.queuelist.qsize()))
+                
+#             else :
+#                 time.sleep(0.5)
+
+#             time.sleep(0.5)
+#     def show(self):
+#         print ("GoodsConsume %s ,infomation -- %d"%(self.__class__,self.queuelist.qsize()))
+
+
+def GetNextOrder(prepareTime,orderDoneQueue,courierArrivedQueue):
+    courier = Courier(courierArrivedQueue);
+    o=Order(prepareTime,orderDoneQueue);
+    return o
+
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
-    # python -m unittest discover
-    # python -m pip install django
     try:
-        print("hello你好")
+        orderDoneQueue = queue.Queue()
+        courierArrivedQueue = queue.Queue()
+        with open('sample.json',encoding='utf-8') as f_in: #sample
+            data = json.load(f_in)
+            for seq,order in enumerate(data):
+                prepareTime = int (order['prepTime'])
+                print('Order %d new with prepareTime: %d'%(seq+1,prepareTime)) 
+                GetNextOrder(prepareTime,orderDoneQueue,courierArrivedQueue)
+                time.sleep(1/int(OrdersPerSecond))# 2 order per second by default
+
+        while True:
+            if not ( all(x.canEate==1 for x in Order.orders) and all(x.Arrived == 1 for x in Courier.couriers) ):
+                print('qsize down: ',len([x.canEate for x in Order.orders if x.canEate==0]))  if debugFlag == '1' else None            
+            else:
+                print('Order   Average  Waittime(seconds): %.3f ,total %d orders' % (statistics.mean([x.waitTime.total_seconds() for x in Order.orders]),len(Order.orders)))
+                print('Courier Average  Waittime(seconds): %.3f ,total %d courier' % (statistics.mean([x.waitTime.total_seconds() for x in Courier.couriers]),len(Courier.couriers)))
+                print()
+                break
+            time.sleep(3)
     except KeyboardInterrupt:
         print ("interruptted by Ctrl-c")
-    sys.exit(1)
+
+    print('main thread exit')  
