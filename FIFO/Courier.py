@@ -21,7 +21,7 @@ class Order(object):
 
     def __init__(self, prepareTime,q):
         self.canEate=0
-        self.canEateTime=datetime(1,1,1)
+        self.canEateTime=0
         self.deQueueTime = 0
         self.HowlongToPrepare=prepareTime
         self.waitTime=timedelta()
@@ -52,7 +52,7 @@ class Courier(object):
 
     def __init__(self, q):
         self.Arrived=0
-        self.ArrivedTime=datetime(1,1,1)
+        self.ArrivedTime=0
         self.deQueueTime = 0
         self.HowlongToArrive= random.uniform(3,15)
         self.waitTime=timedelta()
