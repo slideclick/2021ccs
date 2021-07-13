@@ -1,19 +1,23 @@
 # -*- coding: UTF-8 -*-
 import unittest
 
-class testCourierddd(unittest.TestCase):
+from datetime import datetime,timedelta
+from Courier import Courier,Order,debugFlag,OrdersPerSecond
+
+class testCourier(unittest.TestCase):
     """docstring for testCourier"""
-    print(__name__)
-    def __init__(self, arg):
-        super(testCourier, self).__init__()
-        self.arg = arg
+
     def setUp(self):
+        super(testCourier, self).setUp()
+        self.courier = Courier();
         pass
 
     def tearDown(self):
         pass
 
 
+    def testInit(self):
+        self.assertEqual(self.courier.Arrived,0) 
 
 if __name__ == '__main__':
     unittest.main()
