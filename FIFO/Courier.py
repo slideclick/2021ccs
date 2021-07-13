@@ -66,15 +66,12 @@ class Courier(object):
         print("SetArrived: ",self.__class__,type(self.ArrivedTime))if debugFlag == '1' else None
 
     def SetPicked(self,now):
-        print(type(now),now,self.ArrivedTime)if debugFlag == '1' else None
+        print(type(self.ArrivedTime),now,self.ArrivedTime)if debugFlag == '1' else None
         self.waitTime = now - self.ArrivedTime
         self.deQueueTime = now 
         print('%s %d waittime %.3f'%(self.__class__,id(self),self.waitTime.total_seconds()))
 
 
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
-    pass        
+      
 
         

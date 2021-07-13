@@ -4,7 +4,12 @@ import configparser
 """
 
 class ConfigParser():
-
+    """ read config file settings.ini:
+    >>> con = ConfigParser()
+    >>> res = con.get_config('basic', 'Debug')
+    >>> con.get_config('basic', 'OrdersPerSecond')
+    '2'
+    """
     config_dic = {}
     @staticmethod
     def get_config( sector, item):
@@ -23,8 +28,6 @@ con = ConfigParser()
 res = con.get_config('basic', 'Debug')
 con.get_config('basic', 'OrdersPerSecond')
 if __name__ == '__main__':
-    con = ConfigParser()
-    res = con.get_config('basic', 'Debug')
-    con.get_config('basic', 'OrdersPerSecond')
-    print(con.config_dic)
+    import doctest
+    doctest.testmod()
 
