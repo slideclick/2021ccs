@@ -1,29 +1,35 @@
 # -*- coding: UTF-8 -*-
 from Config import ConfigParser
 from Courier import Courier,Order,debugFlag,OrdersPerSecond
-
+from datetime import datetime,timedelta
 import time,json
 import queue,sys,statistics 
 import threading
 
-# box=15
-# class GoodsConsume(threading.Thread):
-#     def __init__(self,q):
-#         super(GoodsConsume,self).__init__()
-#         self.queuelist=q
+class Dispactcher(threading.Thread):
+    def __init__(self,orderQueue,courierQueue):
+        super(Dispactcher,self).__init__()
+        self.orderQueue=orderQueue
+        self.courierQueue=courierQueue
 
-#     def run(self):
-#         while True:
-#             if not self.queuelist.empty():
-#                 event=self.queuelist.get()
-#                 print( "%s , obj %d,box remained :%d" % (event.__class__, id(event),self.queuelist.qsize()))
+    def run(self):
+        while True:
+            if not self.orderQueue.empty():
+                now=  datetime.now()
+
+                order=self.orderQueue.get()
+                order.SetPicked(now);
+                if not self.courierQueue.empty():
+                    courier=self.courierQueue.get()
+                    courier.SetPicked(now);
+
+                print( "%s obj %d picked by %d,queue remained :%d" % (order.__class__, id(order),id(courier),self.orderQueue.qsize()))
                 
-#             else :
-#                 time.sleep(0.5)
-
-#             time.sleep(0.5)
-#     def show(self):
-#         print ("GoodsConsume %s ,infomation -- %d"%(self.__class__,self.queuelist.qsize()))
+            else :
+                time.sleep(0.01)
+            time.sleep(0.01)
+    def show(self):
+        print ("Dispactcher %s ,infomation -- %d"%(self.__class__,self.orderQueue.qsize()))
 
 
 def GetNextOrder(prepareTime,orderDoneQueue,courierArrivedQueue):
