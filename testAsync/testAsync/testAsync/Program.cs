@@ -14,8 +14,10 @@ namespace testAsync
         }
         private static async Task<int> calleeAsync(int a) 
         {
+            Console.WriteLine("Hello calleeAsync!");
             await Task.Run(() => Thread.Sleep(5000)
             ) ;
+            Console.WriteLine("Hello back!");
             return a; 
         }
 
