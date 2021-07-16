@@ -13,11 +13,10 @@ def main(exp):
 		else: 
 			return print(False)
 		secondc=exp[i]
-		# if secondc not in map.keys:
-		if secondc == map[c] :
-			stack.pop()
-		else:
+		if secondc not in map.keys:
 			stack.append(secondc)
+		elif secondc == map[c] :
+			stack.pop()
 		i=i+1
 	print(len(stack)==0)
 if __name__ == '__main__':
