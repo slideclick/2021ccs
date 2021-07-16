@@ -1,0 +1,32 @@
+Quiz #2:
+A string s only contains the characters '(', ')', '{', '}', '[' and ']', check whether the input is valid.
+The input is valid only if open brackets is closed by the same type of brackets in the correct order.
+
+Example 1:
+Input: s = "()"
+Output: true
+
+Example 2:
+Input: s = "()[]{}"
+Output: true
+
+Example 3:
+Input: s = "(]"
+Output: false
+
+Example 4:
+Input: s = "([)]"
+Output: false
+
+Example 5:
+Input: s = "{[]}"
+Output: true
+
+Constraints:
+1 <= s.length <= 10^4
+
+
+Implement the function:
+
+bool isValid(const char* s) {
+}
