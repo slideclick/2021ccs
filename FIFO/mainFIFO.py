@@ -14,9 +14,9 @@ class Dispactcher(threading.Thread):
 
     def run(self):
         while True:
-            order = self.orderQueue.get()
+            order = self.orderQueue.get()#block
             if order:
-                courier = self.courierQueue.get()
+                courier = self.courierQueue.get()#block
                 now=  datetime.now()
                 if courier:
                     courier.SetPicked(now);
@@ -43,8 +43,8 @@ if __name__ == '__main__':
         courierArrivedQueue = queue.Queue()
         c=Dispactcher(orderDoneQueue,courierArrivedQueue)
         c.start()
-        c.show()
-        with open('dispatch_orders.json',encoding='utf-8') as f_in: #sample
+        c.show()#dispatch_orders sample
+        with open('sample.json',encoding='utf-8') as f_in: #sample
             data = json.load(f_in)
             for seq,order in enumerate(data):
                 prepareTime = int (order['prepTime'])

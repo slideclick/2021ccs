@@ -3,7 +3,7 @@ from RepeatedTimer import RepeatedTimer
 from datetime import datetime,timedelta
 import queue,sys,random
 import threading
-
+import time
 from Config import ConfigParser
 global debugFlag 
 global OrdersPerSecond
@@ -15,9 +15,12 @@ class Order(object):
     @classmethod
     def OrdercanEate(cls,obj):
         obj.trigger.stop()
-        print('----> canEate: %d after %d prepareTime'%( id(obj),obj.HowlongToPrepare)) if debugFlag == '1' else None
+        obj.q.put(obj)#concurrent: next SetcanEate will change it
+        time.sleep(3)
         obj.SetcanEate();
-        obj.q.put(obj)
+        print('----> canEate: %d after %d prepareTime'%( id(obj),obj.HowlongToPrepare)) if debugFlag == '1' else None
+        
+        
 
     def __init__(self, prepareTime,q):
         self.canEate=0
@@ -47,14 +50,15 @@ class Courier(object):
     def CourierArrived(cls,obj):
         obj.trigger.stop()
         print('------------> Arrived %d after travelling %.3f s: '%(id(obj), obj.HowlongToArrive)) if debugFlag == '1' else None
-        obj.SetArrived();
         obj.q.put(obj)
+        obj.SetArrived();
+        
 
     def __init__(self, q):
         self.Arrived=0
         self.ArrivedTime=0
         self.deQueueTime = 0
-        self.HowlongToArrive= random.uniform(3,15)
+        self.HowlongToArrive= 2#random.uniform(3,15)
         self.waitTime=timedelta()
         Courier.couriers.append(self)
         self.trigger=RepeatedTimer(self.HowlongToArrive,Courier.CourierArrived,self)
